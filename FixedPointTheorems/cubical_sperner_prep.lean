@@ -2,6 +2,7 @@
 import Mathlib.Combinatorics.SimpleGraph.DegreeSum
 import Mathlib.Combinatorics.Enumerative.DoubleCounting
 import Mathlib.Algebra.BigOperators.Ring.Nat
+import Mathlib.Tactic
 
 open Classical
 
@@ -1326,6 +1327,7 @@ lemma case_D_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h1 : c
     apply h20
     rwa [h21]
     rw [←hJ2.1, ←hj2]
+    any_goals exact hn1
     rw [←hJ1.1, ←hj2]
   }
   {
@@ -1564,7 +1566,8 @@ lemma case_ABC_count_disj {hn1 : n1 + 1 = SC.n} I k1 q
     exact Or.inl rfl
     rw [hj1,h3]
     exact Or.inr rfl
-    exact h1.2.1
+    · exact hn1
+    · exact h1.2.1
   }
   {
     intro h1
@@ -1586,6 +1589,7 @@ lemma case_C_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h1 : c
   have h3 := @case_BC_ex_unique SC n1 hn1 I hs k1 q h1.2 h1.1.1
   rw [Fintype.existsUnique_iff_card_one] at h2 h3
   rw [case_ABC_count_disj SC I k1 q h1.2,h2,h3]
+  exact hn1
 }
 
 lemma case_B_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h2 : case_B SC I )
@@ -1599,6 +1603,7 @@ lemma case_B_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h2 : c
   apply Finset.card_filter_eq_zero_iff.mpr
   intro J h5
   apply case_B_not_last SC I h2
+  exact hn1
 }
 
 lemma case_A_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h2 : case_A SC I )
@@ -1612,6 +1617,7 @@ lemma case_A_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h2 : c
   apply Finset.card_filter_eq_zero_iff.mpr
   intro J h5
   apply case_A_not_zero SC I h2
+  exact hn1
 }
 
 end cases_ABCD

@@ -22,5 +22,6 @@ theorem brouwer_fixed_point {V : Type*}
   let g := (toContinuousMap e).comp (f.comp (toContinuousMap e.symm))
   obtain ⟨y, hy⟩ := @fixed_point_unit_cube k g
   use (toContinuousMap e.symm) y
-  exact EquivLike.inv_apply_eq_iff_eq_apply.mp hy
+  have h1 : e.symm (e (f (e.symm y))) = e.symm y := congrArg e.symm hy
+  rwa [e.symm_apply_apply] at h1
 }

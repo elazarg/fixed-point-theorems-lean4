@@ -244,7 +244,7 @@ theorem kakutani_fixed_point {V : Type*}
   have hx2 : Tendsto x atTop (nhds xxx) :=  (Tendsto.fst_nhds hA2).fst_nhds.fst_nhds
   have hy2 j: Tendsto (y j) atTop (nhds xxx) := by {
     have h8 i : dist (x i) (y j i) < 1 / (↑(φ i) + 1) := ((h6 (φ i)).2 j).1
-    have h7 := tendsto_one_div_add_atTop_nhds_zero_nat
+    have h7 := @tendsto_one_div_add_atTop_nhds_zero_nat ℝ _ _ _ _
     apply tendsto_of_tendsto_of_dist hx2
     apply squeeze_zero (fun _ ↦ dist_nonneg) _ h7
     intro i

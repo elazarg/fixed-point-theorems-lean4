@@ -260,7 +260,7 @@ theorem fixed_point_unit_cube (f : C(@unit_cube n, @unit_cube n)) : ∃ x, f x =
     obtain ⟨yk, h6⟩ := axiomOfChoice h5
     have h4 : Filter.Tendsto yk Filter.atTop (nhds xxx) := by {
       apply tendsto_of_tendsto_of_dist h2.2
-      have h7 := tendsto_one_div_add_atTop_nhds_zero_nat
+      have h7 := @tendsto_one_div_add_atTop_nhds_zero_nat ℝ _ _ _ _
       apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h7 _
       {
         intro i

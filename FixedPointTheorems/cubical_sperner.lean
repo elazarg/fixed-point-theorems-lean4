@@ -86,6 +86,7 @@ lemma char_complete_face {SC n1 hn1} I J (hs : simplex SC SC.n J) :
     use @insert_index SC n1 hn1 i j
     apply And.intro _ rfl
     apply insert_index_ne
+    exact hn1
     exact hs
   }
   {
@@ -799,8 +800,8 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
     }
     apply Finset.card_nbij f2
     {
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-      intro I h3
+      intro I hI
+      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hI ⊢
       rwa [hcomp]
     }
     {
