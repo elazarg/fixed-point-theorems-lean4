@@ -1,7 +1,4 @@
 
-import Mathlib.Combinatorics.SimpleGraph.DegreeSum
-import Mathlib.Combinatorics.SimpleGraph.Clique
-
 import FixedPointTheorems.cubical_sperner_prep
 
 

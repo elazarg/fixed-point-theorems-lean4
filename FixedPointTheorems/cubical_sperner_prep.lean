@@ -1,5 +1,4 @@
 
-import Mathlib.Combinatorics.SimpleGraph.DegreeSum
 import Mathlib.Combinatorics.Enumerative.DoubleCounting
 import Mathlib.Algebra.BigOperators.Ring.Nat
 import Mathlib.Tactic
