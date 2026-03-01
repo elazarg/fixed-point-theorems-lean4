@@ -77,9 +77,7 @@ lemma caratheodory_1 {V : Type*}
     unfold g2 at h5
     simp only [Fin.ofNat_eq_cast] at h5
     rw [←Fin.val_eq_val] at h5 ⊢
-    rwa [Fin.val_cast_of_lt, Fin.val_cast_of_lt] at h5
-    apply lt_of_lt_of_le i2.2 h4
-    apply lt_of_lt_of_le i1.2 h4
+    rwa [Fin.val_cast_of_lt, Fin.val_cast_of_lt] at h5 <;> omega
   }
   have hsne : s.Nonempty := convexHull_nonempty_iff.mp (Set.nonempty_of_mem h2)
   obtain ⟨sdef, hsdef⟩ := hsne
@@ -249,7 +247,7 @@ theorem kakutani_fixed_point {V : Type*}
     apply squeeze_zero (fun _ ↦ dist_nonneg) _ h7
     intro i
     apply le_trans (le_of_lt (h8 i))
-    simp only [Nat.cast_add, Nat.cast_one, one_div]
+    simp only [one_div]
     apply inv_anti₀ (Nat.cast_add_one_pos i)
     simp only [add_le_add_iff_right, Nat.cast_le]
     exact h3.1.le_apply

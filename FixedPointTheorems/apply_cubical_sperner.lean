@@ -41,7 +41,7 @@ lemma reduced_label_props_1 (f : @unit_cube n → @unit_cube n) (x : @unit_cube 
     rw [h1]
     simp only [le_refl, true_and]
     intro k
-    have h2 : n ≠ k.1 := Nat.ne_of_lt' k.2
+    have h2 : n ≠ k.1 := by omega
     simp only [h2, IsEmpty.forall_iff, true_and]
     intro h3
     have h4 : k ∈ s := by {
@@ -60,7 +60,7 @@ lemma reduced_label_props_1 (f : @unit_cube n → @unit_cube n) (x : @unit_cube 
     rw [hm]
   }
   rw [h1]
-  simp only [Fin.is_le', ne_eq, Fin.val_fin_le, true_and]
+  simp only [Fin.is_le', Fin.val_fin_le, true_and]
   intro k1
   apply And.intro
   {
@@ -168,7 +168,7 @@ noncomputable def sperner_cube_of_function (f : @unit_cube n → @unit_cube n)
       simp only [h2]
       refine (div_eq_one_iff_eq ?_).mpr rfl
       simp only [ne_eq, Nat.cast_eq_zero]
-      exact Nat.ne_zero_of_lt ppos
+      omega
     }
   }
 
@@ -189,7 +189,7 @@ lemma dist_discrete_map p (ppos: 0 < p) (v1 v2 : Fin n → Fin (p+1))
   have h2k := (h1 k).2
   apply And.intro
   repeat {
-    rw [sub_le_iff_le_add', div_add_div_same]
+    rw [sub_le_iff_le_add', ← add_div]
     have ppos2 : 0 < (p : ℝ) := Nat.cast_pos'.mpr ppos
     rwa [div_le_div_iff_of_pos_right ppos2, ←Nat.cast_add_one, Nat.cast_le]
   }
@@ -199,7 +199,7 @@ lemma nearby_points (f : @unit_cube n → @unit_cube n) (p0:ℕ):
     ∃ x0 : @unit_cube n, ∀ k, (f x0).1 k ≥ x0.1 k ∧
     ∃ xk : @unit_cube n, dist x0 xk ≤ 1 / ↑(p0 +1) ∧ (f xk).1 k ≤ xk.1 k := by {
   let p := p0 + 1
-  have ppos : 0 < p := Nat.zero_lt_succ p0
+  have ppos : 0 < p := by omega
   let SC := @sperner_cube_of_function n f p ppos
   obtain ⟨I, h3⟩ := weaker_cubical_sperner SC
   have h4 j : j ≤ n → ∃ i, SC.RL (I i) = j := by {

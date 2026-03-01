@@ -55,7 +55,7 @@ lemma rl_inj_of_complete {SC} m I (hcs : complete_simplex SC m I):
     rw [h2]
   }
   have h2 := hcs.2
-  apply Function.Surjective.injective_of_fintype
+  apply Function.Surjective.injective_of_finite
   rfl
   rw [complete_simplex_iff _ _ hcs.1] at hcs
   intro c
@@ -132,10 +132,7 @@ lemma complete_child_uniq {SC n1} {hn1 : n1 + 1 = SC.n} J (hcs : complete_simple
     rw [complete_simplex_iff] at hcs
     {
       intro c hc
-      have h3 : c ≤ SC.n := by {
-        rw [← hn1]
-        exact Nat.le_add_right_of_le hc
-      }
+      have h3 : c ≤ SC.n := by omega
       obtain ⟨i2, hi2 ⟩ := hcs c h3
       use i2
       apply And.intro _ hi2
@@ -158,9 +155,7 @@ lemma complete_child_uniq {SC n1} {hn1 : n1 + 1 = SC.n} J (hcs : complete_simple
     let c2 := SC.RL (J i2)
     suffices h3 : ¬ (c2 ≤ n1) by {
       apply le_antisymm (SC.rl_proper (J i2)).1
-      rw [← hn1]
-      apply Nat.add_one_le_of_lt
-      exact Nat.gt_of_not_le h3
+      omega
     }
     intro h2
     obtain ⟨i3, hi3⟩ := hi2.2 c2 h2
@@ -188,13 +183,12 @@ lemma incomplete_childs {SC n1} {hn1 : n1 + 1 = SC.n} J (hs : simplex SC SC.n J)
     rw [h1 h3]
     exact even_two
     use 0
-    rw [add_zero]
-    exact Nat.eq_zero_of_not_pos h3
+    omega
   }
   intro cpos
   have h1 : Finset.Nonempty S := by {
     apply Finset.card_ne_zero.mp
-    exact Ne.symm (Nat.ne_of_lt cpos)
+    omega
   }
   obtain ⟨I1, h1 ⟩ := h1
   have hI1S := h1
@@ -298,20 +292,13 @@ lemma complete_boundary_face_last {SC n1} {hn1 : n1 + 1 = SC.n} (I : Fin (n1 + 1
   intro i j hj
   revert i
   have h3 := @boundary_is_A_or_B SC n1 hn1 I hcbf.1
-  have h1 : j.1 = n1 := by {
-    apply Nat.add_one_inj.mp
-    rw [hj, hn1]
-  }
+  have h1 : j.1 = n1 := by omega
   have h4 : ∀ n2, n2 ≤ n1 → ∃ i, SC.RL (I i) = n2 := by {
     intro n2 hn2
     rw [← Set.mem_range, hcbf.2.2]
     simp only [Set.mem_setOf_eq, hn2]
   }
-  have h6 (j2 : Fin SC.n) : j2.1 ≤ n1 := by {
-    apply Nat.le_of_lt_add_one
-    rw [hn1]
-    exact j2.isLt
-  }
+  have h6 (j2 : Fin SC.n) : j2.1 ≤ n1 := by omega
   cases h3
   {
     rename_i h1
@@ -413,7 +400,7 @@ lemma handshake_1 (r : A → B → Prop)
     }
     {
       unfold r2
-      simp only [p1, and_false, false_and, Finset.filter_False, Finset.card_empty, Nat.not_odd_zero]
+      simp only [p1, and_false, false_and, Finset.filter_false, Finset.card_empty, Nat.not_odd_zero]
     }
   }
   {
@@ -500,16 +487,12 @@ lemma child_map_applied [NeZero SC.n] {hn1 : n1 + 1 = SC.n} (v : Fin n1 → Fin 
   cases n1
   exact Fin.elim0 i
   rename_i n2
-  simp only [Fin.natCast_eq_last, Nat.succ_eq_add_one]
-  have h5 : i.1 + 1 < SC.n := by {
-    have h2 := i.2
-    rw [← hn1]
-    exact Nat.add_lt_add_right h2 1
-  }
-  have h2 : i.1 < SC.n := Nat.lt_of_succ_lt h5
+  simp only [Nat.succ_eq_add_one]
+  have h5 : i.1 + 1 < SC.n := by omega
+  have h2 : i.1 < SC.n := by omega
   have h3 := Fin.val_cast_of_lt h2
   rw [Fin.ofNat_eq_cast, h3]
-  have h6 : i.1 + 1 ≠ SC.n := Nat.ne_of_lt h5
+  have h6 : i.1 + 1 ≠ SC.n := by omega
   simp only [h6, ↓reduceIte, Fin.ofNat_eq_cast, Fin.cast_val_eq_self]
 }
 
@@ -569,9 +552,7 @@ lemma child_map_surj_on {hn1 : n1 + 1 = SC.n} w
     exact Fin.cast_val_eq_self i
     have h4 := i.2
     simp only [← hn1] at h3 h4
-    apply Nat.lt_of_le_of_ne
-    exact Nat.le_of_lt_succ h4
-    exact fun a ↦ h3 (congrFun (congrArg HAdd.hAdd a) 1)
+    omega
   }
 }
 
@@ -590,10 +571,7 @@ def child_cube {hn1 : n1 + 1 = SC.n}: SpernerCube where
     apply And.intro
     {
       have h3 := (h2.2 (Fin.ofNat _ n1)).2
-      have h4 : n1 < SC.n := by {
-        rw [← hn1]
-        exact lt_add_one n1
-      }
+      have h4 : n1 < SC.n := by omega
       simp only [Fin.ofNat_eq_cast] at h3
       rw [Fin.val_cast_of_lt h4] at h3
       apply h3
@@ -606,8 +584,7 @@ def child_cube {hn1 : n1 + 1 = SC.n}: SpernerCube where
     rw [child_map_applied] at h3
     have h4 : (Fin.ofNat SC.n i.1).1 = i.1 := by {
       apply Fin.val_cast_of_lt
-      rw [← hn1]
-      exact Nat.lt_add_right 1 i.2
+      omega
     }
     rwa [h4] at h3
     exact hn1
@@ -656,7 +633,7 @@ lemma induction_start (SC : SpernerCube) (h0 : 0 = SC.n)
       intro c
       have h2 := (SC.rl_proper (a c)).1
       simp only [← h0] at h2
-      exact Nat.eq_zero_of_le_zero h2
+      omega
     }
     apply Iff.intro
     {
@@ -761,7 +738,7 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
           by_cases h5 : j.1 + 1 = SC1.n
           {
             rw [h_last, h_last, h_last, h_last]
-            simp only [Fin.natCast_eq_last, Fin.val_last, le_refl, le_add_iff_nonneg_right, zero_le,
+            simp only [le_refl, le_add_iff_nonneg_right, zero_le,
               and_self]
             repeat' exact h5
           }
@@ -770,9 +747,7 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
               rw [h3]
               have h6 := j.2
               simp only [← hk1] at h5 h6
-              apply Nat.lt_of_le_of_ne
-              exact Nat.le_of_lt_succ h6
-              exact fun a ↦ h5 (congrFun (congrArg HAdd.hAdd a) 1)
+              omega
             }
             have hn02 : NeZero SC2.n := by {
               exact NeZero.of_gt hi1
@@ -839,7 +814,7 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
 theorem weaker_cubical_sperner SC : ∃ I, complete_simplex SC SC.n I := by {
   have h1 := strong_cubical_sperner SC.n SC rfl
   obtain ⟨k1, hk1⟩ := h1
-  have h2 : 0 < 2 * k1 + 1 := Nat.zero_lt_succ (2 * k1)
+  have h2 : 0 < 2 * k1 + 1 := by omega
   rw [←hk1, Finset.card_pos] at h2
   obtain ⟨I, hI1⟩ := h2
   use I

@@ -44,7 +44,7 @@ theorem homeo_of_finrank_eq {V W : Type*}
     exact Homeomorph.surjective L.toHomeomorph
     use 0
     rw [interior_closedBall]
-    {simp only [Metric.mem_ball, dist_self, zero_lt_one, pL]}
+    {simp only [Metric.mem_ball, dist_self, zero_lt_one]}
     {exact Ne.symm (zero_ne_one' ℝ)}
   }
   have e1 : pL ≃ₜ Metric.closedBall (0:W) 1 := by {
@@ -81,7 +81,7 @@ lemma unit_cube_homeo_unit_ball {n}
   simp only [Pi.basisFun_apply, Pi.single_nonneg, zero_le_one, true_and]
   apply Pi.le_def.mpr
   intro i
-  simp only [Pi.basisFun_apply, Pi.one_apply]
+  simp only [Pi.one_apply]
   apply update_le_iff.2
   simp only [le_refl, ne_eq, Pi.zero_apply, zero_le_one, implies_true, and_self]
 }

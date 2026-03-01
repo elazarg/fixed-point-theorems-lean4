@@ -98,7 +98,7 @@ lemma monotone_1_of_simplex {m:ℕ } (I : Fin (m+1)→ SC.G) (hs : simplex SC m 
   clear i1 i2 h1
   intro i1
   have h3 := (hs.2 i1.1 i1.2 j).1
-  simp only [Fin.coe_eq_castSucc, Fin.coeSucc_eq_succ, Fin.val_fin_le] at h3
+  simp only [Fin.val_fin_le] at h3
   convert h3
   {
     simp only [Fin.ofNat_eq_cast, Fin.coe_eq_castSucc]
@@ -137,7 +137,7 @@ lemma last_of_simplex {m: ℕ} I (hs : simplex SC m I) j :
   cases m
   simp only [Fin.last_zero, Fin.isValue, le_add_iff_nonneg_right, zero_le]
   rename_i m
-  have h3 : 0 < m + 1 := Nat.zero_lt_succ m
+  have h3 : 0 < m + 1 := by omega
   exact (hs.2 0 h3 j).2
 }
 
@@ -180,7 +180,7 @@ def insert_index (j : Fin (SC.n+1)) (a: Fin (n1 +1 )) : Fin (SC.n+1) :=
       exact Nat.lt_trans hlt j.2
     }
     {
-      simp only [hlt, ↓reduceIte, add_lt_add_iff_right, Fin.is_lt]
+      simp only [hlt, ↓reduceIte, add_lt_add_iff_right]
       rw [← hn1]
       exact a.2
     }
@@ -195,11 +195,11 @@ lemma insert_index_ne j a : @insert_index SC n1 hn1 j a ≠ j := by {
   by_cases hlt : a.val < j.val
   {
     simp only [hlt, ↓reduceIte]
-    exact Nat.ne_of_lt hlt
+    omega
   }
   {
     simp only [hlt, ↓reduceIte, ne_eq]
-    exact ne_of_not_le hlt
+    omega
   }
 }
 
@@ -220,23 +220,21 @@ lemma almost_surjective_of_insert_index (j : Fin (SC.n+1)) (a : Fin (SC.n+1)) (h
   }
   {
     have h2 : j.1 < a.1 := by {
-      apply lt_of_le_of_ne
-      exact Nat.le_of_not_lt hlt
-      exact Fin.val_ne_of_ne (id (Ne.symm h))
+      have := Fin.val_ne_of_ne (id (Ne.symm h))
+      omega
     }
     let a1 := a.1 - 1
     have h3 : a1 + 1 = a.1 := by {
-      apply Nat.sub_add_cancel
-      exact Nat.one_le_of_lt h2
+      show a.1 - 1 + 1 = a.1
+      omega
     }
     let a1f := Fin.ofNat (n1 + 1) a1
     use a1f
     ext
     have h4 : a1 < n1 +1 := by {
-      rw [hn1]
       have h5 := a.2
-      rw [←h3] at h5
-      exact Nat.succ_lt_succ_iff.mp h5
+      show a.1 - 1 < n1 + 1
+      omega
     }
     have h6 : a1f.1 = a1 := by {
       unfold a1f
@@ -244,11 +242,9 @@ lemma almost_surjective_of_insert_index (j : Fin (SC.n+1)) (a : Fin (SC.n+1)) (h
       exact h4
     }
     have h5 : ¬ (a1f < j.1) := by {
-      simp only [not_lt]
-      simp only [h6, Fin.ofNat_eq_cast]
-      apply Nat.le_of_lt_add_one
-      rw [h3]
-      exact h2
+      simp only [not_lt, h6]
+      show j.1 ≤ a.1 - 1
+      omega
     }
     simp only [h5, ↓reduceIte]
     rw [← h3, h6]
@@ -258,7 +254,7 @@ lemma almost_surjective_of_insert_index (j : Fin (SC.n+1)) (a : Fin (SC.n+1)) (h
 lemma insert_index_strict_mono j : StrictMono (@insert_index SC n1 hn1 j) := by {
   intro a b h1
   have h2 : a.1 < b.1 := by {exact h1}
-  have h21 : a.1 < b.1 + 1 := by {exact Nat.lt_add_right 1 h1}
+  have h21 : a.1 < b.1 + 1 := by omega
   unfold insert_index
   by_cases h3 : a.1 < j.1
   {
@@ -271,14 +267,12 @@ lemma insert_index_strict_mono j : StrictMono (@insert_index SC n1 hn1 j) := by 
   {
     by_cases h4 : b.1 < j.1
     {
-      simp only [h3, ↓reduceIte, h4, Fin.mk_lt_mk, Fin.val_fin_lt, gt_iff_lt]
-      exfalso
-      apply h3
-      exact Nat.lt_trans h1 h4
+      simp only [h3, ↓reduceIte, h4, Fin.mk_lt_mk, gt_iff_lt]
+      omega
     }
     {
-      simp only [h3, ↓reduceIte, h4, Fin.mk_lt_mk, Fin.val_fin_lt, gt_iff_lt]
-      exact Nat.add_lt_add_right h1 1
+      simp only [h3, ↓reduceIte, h4, Fin.mk_lt_mk, gt_iff_lt]
+      omega
     }
   }
 }
@@ -351,7 +345,7 @@ lemma is_id_of_strict_mono (m: ℕ ) (f : Fin m → Fin m) (hsm : StrictMono f)
   induction' a with a ha
   {
     intro k h1
-    exact False.elim $ Nat.not_succ_le_zero (↑k) h1
+    omega
   }
   {
     have h1 : Function.Injective f := by {exact StrictMono.injective hsm}
@@ -360,7 +354,7 @@ lemma is_id_of_strict_mono (m: ℕ ) (f : Fin m → Fin m) (hsm : StrictMono f)
     have h3 j : j < k → f j = j := by {
       intro hj
       apply ha
-      exact lt_of_lt_of_le hj (Nat.le_of_lt_succ hk)
+      omega
     }
     by_cases h4 : f k < k
     apply h1 (h3 (f k) h4)
@@ -502,24 +496,20 @@ lemma surround_index (j : Fin (SC.n + 1)) (i : Fin (n1 + 1)) (hij : i.1 + 1 = j.
     (hj1 : j ≠ Fin.last SC.n): ((@insert_index SC n1 hn1 j i).1 + 1 = j.1
     ∧ j.1 + 1 = @insert_index SC n1 hn1 j (i+1)) := by {
   unfold insert_index
-  have h2 : i.1 < j.1 := by {
-    rw [←hij]
-    simp only [lt_add_iff_pos_right, zero_lt_one]
-  }
+  have h2 : i.1 < j.1 := by omega
   have h3 : (i+1).1 = i.1 + 1 := by {
     refine Fin.val_add_one_of_lt ?_
     simp only [Nat.succ_eq_add_one]
     show i.1 < n1
     have h6 := Fin.val_lt_last hj1
-    rw [←hij,←hn1] at h6
-    exact Nat.succ_lt_succ_iff.mp h6
+    omega
   }
   apply And.intro
   {
     simp only [h2, ↓reduceIte]
     exact hij
   }
-  simp only [h3, hij, lt_self_iff_false, ↓reduceIte, Nat.add_left_cancel_iff]
+  simp only [h3, hij, lt_self_iff_false, ↓reduceIte]
 }
 
 lemma parent_injective I (hs : simplex SC n1 I) J j
@@ -581,8 +571,7 @@ lemma parent_simplex_case_BC I (hs : simplex SC n1 I) J
     congr! with h7
     simp only [Fin.ofNat_eq_cast, Fin.val_zero, not_lt_zero', ↓reduceIte]
     rw [Fin.val_cast_of_lt, Fin.val_cast_of_lt h7]
-    rw [hn1] at h7
-    exact Nat.add_lt_add_right h7 1
+    omega
   }
   intro j1 hj1 k1
   apply And.intro
@@ -663,16 +652,12 @@ lemma parent_simplex_case_AC I (hs : simplex SC n1 I) J j (hj : j = Fin.last SC.
       rwa [hn1]
       exact Nat.le_add_right j1 1
     }
-    have h16 : j1+1 = SC.n := by {
-      apply le_antisymm hj1
-      exact Nat.le_of_not_lt h12
-    }
+    have h16 : j1+1 = SC.n := by omega
     have h13 : Fin.ofNat _ j1 = Fin.last n1 := by {
       suffices h15 : j1 = n1 by {
         simp only [h15, Fin.ofNat_eq_cast, Fin.natCast_eq_last]
       }
-      rw [←hn1] at h16
-      exact Nat.succ_inj.mp h16
+      omega
     }
     have h14 : Fin.ofNat _ (j1+1) = j := by {
       rw [hj]
@@ -720,10 +705,7 @@ lemma parent_simplex_case_D I (hs : simplex SC n1 I) J j i
     unfold delete_vertex at h5
     have h6 : (@insert_index SC n1 hn1 j i).1 + 1 = j := by {
       unfold insert_index
-      have h7 : i.1 < j.1 := by {
-        rw [←hij]
-        simp only [lt_add_iff_pos_right, zero_lt_one]
-      }
+      have h7 : i.1 < j.1 := by omega
       simp only [h7, ↓reduceIte]
       exact hij
     }
@@ -766,7 +748,7 @@ lemma parent_simplex_case_D I (hs : simplex SC n1 I) J j i
       rw [← h12]
       simp only [Fin.ofNat_eq_cast]
       rw [Fin.val_cast_of_lt]
-      exact Nat.add_lt_add_right h4 1
+      omega
     }
     simp only [Fin.ofNat_eq_cast] at h11 h12
     obtain ⟨i3, hi3⟩ := h11
@@ -955,7 +937,7 @@ lemma delete_vertex_ccc_fun_match J (hs : simplex SC SC.n J) j1 j2
     rw [@child_simplex_char SC n1 hn1 I J hs]
     use j1
   }
-  have scnpos : 0 < SC.n :=  Nat.lt_of_sub_eq_succ (id (Eq.symm hn1))
+  have scnpos : 0 < SC.n := by omega
   by_cases h4 : j1 = 0
   {
     simp only [h4, forall_const, ne_eq, not_true_eq_false, IsEmpty.forall_iff, and_true]
@@ -983,7 +965,7 @@ lemma delete_vertex_ccc_fun_match J (hs : simplex SC SC.n J) j1 j2
     have c2pos : 0 < c2 := by {
       apply ccc_pos _ _ hs
       simp only [ne_eq, Fin.zero_eq_one_iff, Nat.add_eq_right]
-      exact Nat.ne_zero_of_lt scnpos
+      omega
     }
     let j3 := @insert_index SC n1 hn1 j1 i1
     have h9 : (ccc_fun SC J j3).1 = c2 + SC.n:= by {
@@ -1001,8 +983,7 @@ lemma delete_vertex_ccc_fun_match J (hs : simplex SC SC.n J) j1 j2
       exact Fin.is_le (ccc_fun SC J j3)
     }
     simp only [add_le_iff_nonpos_left, nonpos_iff_eq_zero] at h10
-    rw [h10] at c2pos
-    exact Nat.not_succ_le_zero 0 c2pos
+    omega
   }
   simp only [h4, IsEmpty.forall_iff, ne_eq, not_false_eq_true, forall_const, true_and]
   have h2 : I 0 = J 0 := by {
@@ -1040,7 +1021,7 @@ lemma case_D_iff_not_end_1 I (hs : simplex SC n1 I) j
     apply @insert_index_ne SC n1 hn1 j 0
     rw [←h1, h3]
     unfold ccc_fun coord_change_count
-    simp only [ne_eq, not_true_eq_false, Finset.filter_False, Finset.card_empty, Fin.zero_eta]
+    simp only [ne_eq, not_true_eq_false, Finset.filter_false, Finset.card_empty, Fin.zero_eta]
   }
   simp only [ne_eq, h2, not_false_eq_true, true_and]
   apply Iff.intro
@@ -1116,8 +1097,7 @@ lemma case_D_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h1 : c
     refine Fin.lt_add_one_iff.mpr ?_
     show i1.1 < n1
     have h3 := Fin.val_lt_last h2.2
-    simp only [←hn1,←hi1] at h3
-    exact Nat.succ_lt_succ_iff.mp h3
+    omega
   }
   have h11 := @surround_index SC n1 hn1 j1 i1 hi1 h2.2
   have h12 : @insert_index SC n1 hn1 j1 i1 ≤ j1 ∧ j1 ≤ @insert_index SC n1 hn1 j1 (i1+1) := by {
@@ -1234,13 +1214,7 @@ lemma case_D_parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) (h1 : c
     have h21 := ccc_add SC J3 h9.2.1.2.1 _ _ _ h12
     unfold delete_vertex at h31
     rw [h31] at h21
-    have h22 c1 c2 : 2 = c1 + c2 → 0 < c2 → c1 ≤ 1 := by {
-      intro g1 g2
-      suffices g3 : c1 + c2 ≤ 1 + c2 by exact Nat.add_le_add_iff_right.mp g3
-      rw [←g1, add_comm, Nat.le_iff_lt_add_one]
-      simp only [lt_add_iff_pos_left]
-      exact g2
-    }
+    have h22 c1 c2 : 2 = c1 + c2 → 0 < c2 → c1 ≤ 1 := by omega
     have h23 : coord_change_count SC (I i1) (J3 j1) ≤ 1 := by {
       rw [h9.1]
       apply h22 _ _ h21
@@ -1435,7 +1409,7 @@ lemma case_AC_ex_unique I (hs : simplex SC n1 I) k1 q
   simp only [Fin.val_zero, Fin.val_last, zero_add, ite_eq_left_iff,
     not_lt, nonpos_iff_eq_zero,one_ne_zero, imp_false]
   rw [←hn1]
-  exact Nat.add_one_ne_zero n1
+  omega
 }
 
 lemma case_B_not_last I (h1 : case_B SC I) J
@@ -1449,7 +1423,7 @@ lemma case_B_not_last I (h1 : case_B SC I) J
     simp only [Fin.val_zero, Fin.val_last, zero_add, ite_eq_left_iff,
         not_lt, nonpos_iff_eq_zero,one_ne_zero, imp_false]
     rw [←hn1]
-    exact Nat.add_one_ne_zero n1
+    omega
   }
   have h5 := (J (Fin.last SC.n) k1).is_le
   rw [h3 k1,←h4,hk1 0] at h5
@@ -1514,13 +1488,13 @@ lemma case_BC_ex_unique I (hs : simplex SC n1 I) k1 q
     congr!
   }
   rw [←h6, ←h21 k1] at h5
-  exact Nat.succ_inj.mp (Eq.symm h5)
+  omega
 }
 
 lemma zero_ne_last {hn1 : n1 + 1 = SC.n} : 0 ≠ Fin.last SC.n := by {
   simp only [ne_eq, Fin.zero_eq_last_iff]
   rw [←hn1]
-  exact Nat.add_one_ne_zero n1
+  omega
 }
 
 lemma case_A_not_zero I (h1 : case_A SC I) J
