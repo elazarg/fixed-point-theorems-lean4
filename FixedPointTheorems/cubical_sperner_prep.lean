@@ -62,7 +62,7 @@ lemma one_of_ABCD (I : Fin (n1 +1) → SC.G) :
   by_cases h1 : case_D SC I
   exact Or.inr (Or.inr (Or.inr h1))
   unfold case_D at h1
-  push_neg at h1
+  push Not at h1
   obtain ⟨j , ⟨ q, h2 ⟩⟩ := h1
   by_cases q0 : q = 0
   {
