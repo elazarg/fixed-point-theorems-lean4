@@ -86,7 +86,7 @@ lemma homeo_unit_cube_of_convex_compact {V : Type*}
       (AffineIsometryEquiv.constVSub ℝ pss).symm.toAffineMap)
   }
   have h34 : (interior s3).Nonempty := by {
-    rw [Convex.interior_nonempty_iff_affineSpan_eq_top h32]
+    refine (Convex.interior_nonempty_iff_affineSpan_eq_top h32).mpr ?_
     unfold s3
     rw [←AffineIsometryEquiv.coe_toAffineEquiv]
     rw [← AffineSubspace.comap_span]

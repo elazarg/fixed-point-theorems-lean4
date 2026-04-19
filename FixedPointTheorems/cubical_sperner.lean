@@ -773,8 +773,10 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
     apply Finset.card_nbij f2
     {
       intro I hI
-      simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hI ⊢
-      rwa [hcomp]
+      have hI' : complete_simplex SC2 SC2.n I :=
+        (Finset.mem_filter.mp (Finset.mem_coe.mp hI)).2
+      exact Finset.mem_coe.mpr
+        (Finset.mem_filter.mpr ⟨Finset.mem_univ _, (hcomp I).mpr hI'⟩)
     }
     {
       intro I1 h41 I2 h42 h5
@@ -802,7 +804,8 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
       obtain ⟨I, h4⟩ := h4
       use I
       simp only [h4, and_true]
-      rwa [← hcomp, h4]
+      exact Finset.mem_coe.mpr (Finset.mem_filter.mpr
+        ⟨Finset.mem_univ I, (hcomp I).mp (h4 ▸ h3)⟩)
     }
   }
 
