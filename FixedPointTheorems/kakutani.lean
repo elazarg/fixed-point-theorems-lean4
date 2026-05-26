@@ -268,14 +268,14 @@ theorem kakutani_fixed_point {V : Type*}
     }
     apply And.intro
     {
-      have h12 := tendsto_finset_sum Finset.univ (fun i _ ↦ ha2 i)
+      have h12 := tendsto_finsetSum Finset.univ (fun i _ ↦ ha2 i)
       have h11 i : ∑ c, α c i = 1 := (h6 (φ i)).1.2.1
       simp only [h11, tendsto_const_nhds_iff] at h12
       exact h12.symm
     }
     have h11 i : x i = ∑ j, α j i • z j i := (h6 (φ i)).1.2.2
     have h12 j := Tendsto.smul (ha2 j) (hz2 j)
-    have h13 := tendsto_finset_sum Finset.univ (fun i _ ↦ h12 i)
+    have h13 := tendsto_finsetSum Finset.univ (fun i _ ↦ h12 i)
     simp only [← h11] at h13
     have h14 : Tendsto (fun i ↦ (x i).1) atTop (nhds xxx.1) := by {
       apply continuous_subtype_val.seqContinuous hx2

@@ -568,7 +568,7 @@ lemma parent_simplex_case_BC I (hs : simplex SC n1 I) J
     rw [h1]
     unfold delete_vertex insert_index
     congr! with h7
-    simp only [Fin.ofNat_eq_cast, Fin.val_zero, not_lt_zero', ↓reduceIte]
+    simp only [Fin.ofNat_eq_cast, Fin.val_zero, not_lt_zero, ↓reduceIte]
     rw [Fin.val_cast_of_lt, Fin.val_cast_of_lt h7]
     omega
   }
@@ -1483,7 +1483,7 @@ lemma case_BC_ex_unique I (hs : simplex SC n1 I) k1 q
   have h6 : I (Fin.last n1) = J2 (Fin.last SC.n) := by {
     rw [hJ2.1]
     unfold delete_vertex insert_index
-    simp only [Fin.val_last, Fin.val_zero, not_lt_zero', ↓reduceIte]
+    simp only [Fin.val_last, Fin.val_zero, not_lt_zero, ↓reduceIte]
     congr!
   }
   rw [←h6, ←h21 k1] at h5
@@ -1503,7 +1503,7 @@ lemma case_A_not_zero I (h1 : case_A SC I) J
   have h4 : I (Fin.last n1) = J (Fin.last SC.n) := by {
     rw [h2.1]
     unfold delete_vertex insert_index
-    simp only [Fin.val_last, Fin.val_zero, not_lt_zero', ↓reduceIte]
+    simp only [Fin.val_last, Fin.val_zero, not_lt_zero, ↓reduceIte]
     congr!
   }
   apply Nat.zero_ne_add_one (J 0 k1).1

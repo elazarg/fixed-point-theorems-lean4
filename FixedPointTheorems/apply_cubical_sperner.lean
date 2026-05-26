@@ -280,3 +280,8 @@ theorem fixed_point_unit_cube (f : C(@unit_cube n, @unit_cube n)) : ∃ x, f x =
   ext k
   apply le_antisymm (h4 k) (h3 k)
 }
+
+/-- The cubical fixed-point theorem stated with mathlib's `Function.IsFixedPt` vocabulary. -/
+theorem fixed_point_unit_cube_isFixedPt (f : C(@unit_cube n, @unit_cube n)) :
+    ∃ x, Function.IsFixedPt f x := by
+  simpa [Function.IsFixedPt] using fixed_point_unit_cube f
