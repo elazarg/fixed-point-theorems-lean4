@@ -98,17 +98,7 @@ lemma monotone_1_of_simplex {m:ℕ } (I : Fin (m+1)→ SC.G) (hs : simplex SC m 
   intro i1
   have h3 := (hs.2 i1.1 i1.2 j).1
   simp only [Fin.val_fin_le] at h3
-  convert h3
-  {
-    simp only [Fin.ofNat_eq_cast, Fin.coe_eq_castSucc]
-  }
-  {
-    have h4 : i1.succ.1 = i1 + 1 := by { rfl }
-    ext
-    rw [h4, Fin.ofNat_eq_cast]
-    symm
-    apply Fin.val_cast_of_lt $ Nat.add_lt_add_right i1.2 1
-  }
+  convert h3 <;> ext <;> simp [Fin.ofNat_eq_cast, Nat.mod_eq_of_lt]
 }
 
 lemma monotone_2_of_simplex {m:ℕ } (I : Fin (m+1)→ SC.G) (hs : simplex SC m I) (i1 i2 : Fin (m+1)) :
