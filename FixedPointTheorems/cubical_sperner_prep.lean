@@ -583,11 +583,13 @@ lemma parent_simplex_case_BC I (hs : simplex SC n1 I) J
   }
   {
     have h6 := h5 n1 (lt_add_one n1)
-    convert (h3 k1).2
-    convert h6
-    rw [hn1]
-    simp only [Fin.ofNat_eq_cast, Fin.natCast_eq_last]
-    simp only [Fin.ofNat_eq_cast, Fin.natCast_eq_last]
+    have e1 : (Fin.ofNat (SC.n + 1) (n1 + 1) : Fin (SC.n + 1)) = Fin.last SC.n := by
+      rw [← hn1]; simp [Fin.ofNat_eq_cast, Fin.natCast_eq_last]
+    have e2 : (Fin.ofNat (n1 + 1) n1 : Fin (n1 + 1)) = Fin.last n1 := by
+      simp [Fin.ofNat_eq_cast, Fin.natCast_eq_last]
+    rw [e1, e2] at h6
+    rw [congrFun h6 k1]
+    exact (h3 k1).2
   }
 }
 
