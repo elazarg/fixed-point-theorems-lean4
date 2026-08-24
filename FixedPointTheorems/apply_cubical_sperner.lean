@@ -131,7 +131,7 @@ lemma reduced_label_props_3 (f : @unit_cube n → @unit_cube n) (x : @unit_cube 
 noncomputable def discrete_map (p : ℕ ) (v : Fin n → Fin (p+1)) : @unit_cube n :=
   ⟨ fun i ↦ ((v i).1 : ℝ ) / p , by {
     unfold unit_cube
-    simp only [Set.mem_setOf_eq]
+    simp only [Set.mem_ofPred_eq]
     rw [Pi.le_def, Pi.le_def, ←forall_and]
     intro i
     simp only [Pi.zero_apply, Pi.one_apply]

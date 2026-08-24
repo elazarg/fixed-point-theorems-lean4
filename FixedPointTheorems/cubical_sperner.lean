@@ -13,7 +13,7 @@ lemma complete_simplex_iff {SC} m I(hs : simplex SC m I) :
   apply Iff.intro
   {
     intro h1 c hc
-    rwa [← Set.mem_range, h1.2, Set.mem_setOf_eq]
+    rwa [← Set.mem_range, h1.2, Set.mem_ofPred_eq]
   }
   {
     intro c1
@@ -33,7 +33,7 @@ lemma complete_simplex_iff {SC} m I(hs : simplex SC m I) :
       Set.mem_range] at h1
     obtain ⟨ i, hi⟩ := h1
     use i
-    simp only [Set.coe_toFinset, Set.mem_setOf_eq]
+    simp only [Set.coe_toFinset, Set.mem_ofPred_eq]
     apply And.intro (Fin.is_le i)
     unfold f1
     rw [← hi]
@@ -112,7 +112,7 @@ lemma complete_child_uniq {SC n1} {hn1 : n1 + 1 = SC.n} J (hcs : complete_simple
     ∃! (I : Fin (n1+1) → SC.G), complete_simplex SC n1 I ∧ is_face SC I J := by {
   have h4 : ∃ i, SC.RL (J i) = SC.n := by {
     rw [← Set.mem_range, hcs.2]
-    simp only [Set.mem_setOf_eq, le_refl]
+    simp only [Set.mem_ofPred_eq, le_refl]
   }
   obtain ⟨ i, hi⟩ := h4
   let I := @delete_vertex SC n1 hn1 i J
@@ -293,7 +293,7 @@ lemma complete_boundary_face_last {SC n1} {hn1 : n1 + 1 = SC.n} (I : Fin (n1 + 1
   have h4 : ∀ n2, n2 ≤ n1 → ∃ i, SC.RL (I i) = n2 := by {
     intro n2 hn2
     rw [← Set.mem_range, hcbf.2.2]
-    simp only [Set.mem_setOf_eq, hn2]
+    simp only [Set.mem_ofPred_eq, hn2]
   }
   have h6 (j2 : Fin SC.n) : j2.1 ≤ n1 := by omega
   cases h3
@@ -385,7 +385,7 @@ lemma handshake_1 (r : A → B → Prop)
     {
       intro p2
       have p3 := h3 a (h6 a p1)
-      simp only [Set.mem_setOf_eq] at p3
+      simp only [Set.mem_ofPred_eq] at p3
       cases p3
       rename_i p4
       exact p4
@@ -625,7 +625,7 @@ lemma induction_start (SC : SpernerCube) (h0 : 0 = SC.n)
   {
     ext i
     simp only [← h0]
-    simp only [Set.mem_range, nonpos_iff_eq_zero, Set.setOf_eq_eq_singleton, Set.mem_singleton_iff]
+    simp only [Set.mem_range, nonpos_iff_eq_zero, Set.ofPred_eq_eq_singleton, Set.mem_singleton_iff]
     have h3 : ∀ c, SC.RL (a c) = 0 := by {
       intro c
       have h2 := (SC.rl_proper (a c)).1
@@ -671,7 +671,8 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
       rw [← hk1]
       exact instNeZeroNatHAdd_1
     }
-    have h2 := hind SC2 rfl
+    have h2 : Odd (Finset.card { I : Fin (k+1) → SC2.G | complete_simplex SC2 SC2.n I}) :=
+      hind SC2 rfl
     apply Eq.mpr _ h2
     apply congrArg
     let f1 : SC2.G → SC1.G := child_map SC1
@@ -727,8 +728,9 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
             rw [← hk1]
             rfl
           }
-          rw [← h6, ← h6, ←h6, ← h6]
-          exact h4 (Fin.ofNat _ j.1)
+          have h7 := h4 (Fin.ofNat _ j.1)
+          rw [h6, h6, h6, h6] at h7
+          exact h7
         }
         {
           intro h4 j
@@ -787,7 +789,7 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
     {
       simp only [Finset.coe_filter, Finset.mem_univ, true_and]
       intro J
-      simp only [Set.mem_setOf_eq, Set.mem_image]
+      simp only [Set.mem_ofPred_eq, Set.mem_image]
       intro h3
       have h4 : ∃ I, f2 I = J := by {
         suffices h6 : ∀ i, ∃ ii, f1 ii = J i by {
@@ -804,8 +806,7 @@ theorem strong_cubical_sperner (k: ℕ ) : ∀ (SC : SpernerCube), k = SC.n →
       obtain ⟨I, h4⟩ := h4
       use I
       simp only [h4, and_true]
-      exact Finset.mem_coe.mpr (Finset.mem_filter.mpr
-        ⟨Finset.mem_univ I, (hcomp I).mp (h4 ▸ h3)⟩)
+      exact Set.mem_ofPred.mpr ((hcomp I).mp (h4 ▸ h3))
     }
   }
 

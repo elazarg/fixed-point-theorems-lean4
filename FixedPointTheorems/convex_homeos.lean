@@ -72,7 +72,7 @@ lemma homeo_unit_cube_of_convex_compact {V : Type*}
     [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
     (s: Set V) (hcvx : Convex ℝ s) (hcmpct : IsCompact s) (hne : s.Nonempty)
     : ∃ k, Nonempty (s ≃ₜ Set.Icc (0 : Fin k → ℝ) 1) := by {
-  haveI := hne.coe_sort
+  have := hne.coe_sort
   let W := affineSpan ℝ s
   obtain ⟨ps, hps⟩ := hne
   let pss : W := ⟨ps, mem_affineSpan ℝ hps⟩

@@ -138,7 +138,7 @@ lemma set_valued_map_approx_fixed_point {V : Type*}
     intro x
     exact convex_convexHull ℝ {z | ∃ y, dist x y < eps ∧ z ∈ f y}
   }
-  haveI : CompactSpace ↑s := isCompact_iff_compactSpace.mp hcmpct
+  have : CompactSpace ↑s := isCompact_iff_compactSpace.mp hcmpct
   have h2 := exists_continuous_forall_mem_convex_of_local_const hG1
   have h3 : ∃ g : C(s, V), ∀ x, g x ∈ G x := by {
     apply h2
@@ -206,7 +206,7 @@ theorem kakutani_fixed_point {V : Type*}
   let Btype := ((↑s × (Fin (k + 1) → ↑s)) × (Fin (k + 1) → V)) × (Fin (k + 1) → ℝ)
   let sB : Set Btype := (Set.univ ×ˢ {x | ∀ i, x i ∈ s}) ×ˢ (Set.Icc 0 1)
   have hBc : IsCompact sB := by {
-    haveI : CompactSpace ↑s := isCompact_iff_compactSpace.mp hcmpct
+    have : CompactSpace ↑s := isCompact_iff_compactSpace.mp hcmpct
     apply IsCompact.prod
     apply IsCompact.prod
     {

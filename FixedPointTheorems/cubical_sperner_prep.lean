@@ -787,7 +787,7 @@ lemma parent_simplex_case_D I (hs : simplex SC n1 I) J j i
 }
 
 
-def coord_change_count (v1 v2 : SC.G) := Finset.card {i | v1 i ≠ v2 i}
+noncomputable def coord_change_count (v1 v2 : SC.G) := Finset.card {i | v1 i ≠ v2 i}
 
 lemma ccc_add {m} I (hs : simplex SC m I) (i1 i2 i3) (h1 : i1 ≤ i2 ∧ i2 ≤ i3) :
     coord_change_count SC (I i1) (I i3) =
@@ -842,7 +842,7 @@ lemma ccc_pos {m} I (hs : simplex SC m I) i1 i2 (h1 : i1 ≠ i2)
   apply h2
 }
 
-def ccc_fun {m} (I : Fin (m+1)→ SC.G) (i : Fin (m+1)) : Fin (SC.n + 1 )
+noncomputable def ccc_fun {m} (I : Fin (m+1)→ SC.G) (i : Fin (m+1)) : Fin (SC.n + 1 )
     := ⟨ coord_change_count SC (I 0) (I i), by {
       refine Nat.lt_succ_of_le ?_
       exact card_finset_fin_le {i_1 | I 0 i_1 ≠ I i i_1}
@@ -871,7 +871,7 @@ lemma ccc_fun_case_D_iff {m} I (hs : simplex SC m I) :
     case_D SC I ↔ ccc_fun SC I (Fin.last m) = Fin.last SC.n := by {
   have h1 : (ccc_fun SC I (Fin.last m) = Fin.last SC.n) ↔ ∀ k, I 0 k ≠ I (Fin.last m) k  := by {
     unfold ccc_fun coord_change_count
-    rw [Fin.mk.inj_iff]
+    rw [Fin.ext_iff]
     have h3 : SC.n = Fintype.card (Fin SC.n) := by {exact Eq.symm (Fintype.card_fin SC.n)}
     simp only [ne_eq, Fin.val_last]
     nth_rewrite 7 [h3]
@@ -1616,7 +1616,7 @@ lemma case_B_boundary {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I)
 -- used in other file
 lemma parent_count {hn1 : n1 + 1 = SC.n} I (hs : simplex SC n1 I) :
     Finset.card { J : Fin (SC.n + 1) → SC.G | is_face SC I J} ∈ {c | c = 1 ∨ c = 2} := by {
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   have h1 := one_of_ABCD SC I
   rw [←or_assoc] at h1
   cases' h1 with h1 h1
