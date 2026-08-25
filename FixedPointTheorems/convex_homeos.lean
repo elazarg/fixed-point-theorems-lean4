@@ -1,6 +1,9 @@
+module
 
-import Mathlib.Analysis.Convex.Intrinsic
-import Mathlib.Analysis.Convex.GaugeRescale
+public import Mathlib.Analysis.Convex.Intrinsic
+public import Mathlib.Analysis.Convex.GaugeRescale
+
+@[expose] public section
 
 
 /-
