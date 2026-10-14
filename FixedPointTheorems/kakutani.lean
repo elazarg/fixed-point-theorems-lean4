@@ -6,6 +6,7 @@ public import FixedPointTheorems.brouwer
 import Mathlib.Analysis.Normed.Affine.Isometry
 import Mathlib.Analysis.Convex.PartitionOfUnity
 import Mathlib.Analysis.Convex.Caratheodory
+import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
 
 @[expose] public section
 
