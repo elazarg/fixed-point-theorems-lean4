@@ -1,5 +1,5 @@
 name = "fixed-point-theorems"
-version = "4.35.0"
+version = "4.36.0"
 keywords = ["math"]
 defaultTargets = ["FixedPointTheorems"]
 fixedToolchain = true
@@ -13,7 +13,7 @@ autoImplicit = false
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.35.0"
+rev = "v4.36.0"
 
 [[lean_lib]]
 name = "FixedPointTheorems"
